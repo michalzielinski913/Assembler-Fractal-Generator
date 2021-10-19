@@ -69,6 +69,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Complex.cs" />
+    <Compile Include="FractalGenerator.cs" />
+    <Compile Include="Mandelbrot.cs" />
     <Compile Include="Render.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

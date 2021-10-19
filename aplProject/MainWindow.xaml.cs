@@ -71,7 +71,7 @@ namespace aplProject
                 MessageBox.Show("Iterations amount must be valid Int!");
                 return;
             }
-
+            Mandelbrot man = new Mandelbrot(iterations);
             map = new Bitmap(Mwidth, Mheight);
             for (int x = 0; x < Mwidth; x++)
             {
@@ -82,15 +82,8 @@ namespace aplProject
                     double b = (double)(y - (Mheight / 2)) / (double)(Mheight / 4);
                     Complex c = new Complex(a, b);
                     Complex z = new Complex(0, 0);
-                    int it = 0;
-                    do
-                    {
-                        it++;
-                        z.Square();
-                        z.Add(c);
-                        if (z.magnitude() > 2.0) break;
-                    } while (it < iterations);
-                    map.SetPixel(x, y, it < 30 ? System.Drawing.Color.Black : System.Drawing.Color.White);
+                    int it = man.countIterations(c, z);
+                    map.SetPixel(x, y, man.getColor(it));
                 }
             }
             try
