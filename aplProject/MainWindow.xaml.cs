@@ -1,6 +1,7 @@
 ﻿using SharpGL;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -31,6 +32,8 @@ namespace aplProject
         private int iterations;
         private EngineType engine;
         private Bitmap map;
+        private System.ComponentModel.BackgroundWorker fractalGenerationWorker;
+
         private int Mwidth = 1920;
         private int Mheight = 1080;
         private void initializeMeasurementTable()
@@ -43,6 +46,7 @@ namespace aplProject
             measurement.IsReadOnly =true;
             measurement.CanUserReorderColumns = false;
             measurement.CanUserSortColumns = false;
+            progress.Visibility = Visibility.Hidden;
         }
 
         public MainWindow()
@@ -52,7 +56,70 @@ namespace aplProject
             iterations = 80;
             engine = EngineType.CSHARP;
             SelectionEngine.SelectedIndex = 0;
-            
+
+            fractalGenerationWorker = new BackgroundWorker();
+            fractalGenerationWorker.DoWork += generateFractalWorker;
+            fractalGenerationWorker.RunWorkerCompleted += generateFractalComplete;
+            fractalGenerationWorker.WorkerReportsProgress = true;
+            fractalGenerationWorker.ProgressChanged += new ProgressChangedEventHandler(generateFractalReportProgress);
+
+
+        }
+
+        private void generateFractalWorker(object sender, DoWorkEventArgs e)
+        {
+            Mandelbrot man = new Mandelbrot(iterations);
+            map = new Bitmap(Mwidth, Mheight);
+            int test;
+            for (int x = 0; x < Mwidth; x++)
+            {
+                test = (x ) * 100;
+                
+                for (int y = 0; y < Mheight; y++)
+                {
+                    double a = (double)(x - (Mwidth / 2)) / (double)(Mwidth / 4);
+                    double b = (double)(y - (Mheight / 2)) / (double)(Mheight / 4);
+                    Complex c = new Complex(a, b);
+                    Complex z = new Complex(0, 0);
+                    int it = man.countIterations(c, z);
+                    map.SetPixel(x, y, man.getColor(it));
+                    (sender as BackgroundWorker).ReportProgress(test);
+                }
+            }
+          
+        }
+
+        private void generateFractalReportProgress(object sender, ProgressChangedEventArgs e)
+        {
+
+            progress.Value = e.ProgressPercentage;
+        }
+
+        private void generateFractalComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            try
+            {
+                map.Save("mandelbrot.png");
+            }
+            catch (Exception ed)
+            {
+                MessageBox.Show("Image mandelbrot.png could not be saved!");
+            }
+
+            try
+            {
+                mandelbrot.Source = ImageSourceFromBitmap(map);
+            }
+            catch (OutOfMemoryException oome)
+            {
+                MessageBox.Show("Image was to big to display!");
+            }
+            progress.Visibility = Visibility.Hidden;
+            iter.IsEnabled = true;
+            width.IsEnabled = true;
+            height.IsEnabled = true;
+            runButton.IsEnabled = true;
+            SelectionEngine.IsEnabled = true;
         }
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
@@ -71,36 +138,15 @@ namespace aplProject
                 MessageBox.Show("Iterations amount must be valid Int!");
                 return;
             }
-            Mandelbrot man = new Mandelbrot(iterations);
-            map = new Bitmap(Mwidth, Mheight);
-            for (int x = 0; x < Mwidth; x++)
-            {
-                Trace.WriteLine(x);
-                for (int y = 0; y < Mheight; y++)
-                {
-                    double a = (double)(x - (Mwidth / 2)) / (double)(Mwidth / 4);
-                    double b = (double)(y - (Mheight / 2)) / (double)(Mheight / 4);
-                    Complex c = new Complex(a, b);
-                    Complex z = new Complex(0, 0);
-                    int it = man.countIterations(c, z);
-                    map.SetPixel(x, y, man.getColor(it));
-                }
-            }
-            try
-            {
-                map.Save("mandelbrot.png");
-            }catch(Exception ed)
-            {
-                MessageBox.Show("Image mandelbrot.png could not be saved!");
-            }
+            iter.IsEnabled = false;
+            width.IsEnabled = false;
+            height.IsEnabled = false;
+            runButton.IsEnabled = false;
+            SelectionEngine.IsEnabled = false;
+            progress.Visibility = Visibility.Visible;
+            fractalGenerationWorker.RunWorkerAsync();
             
-            try
-            {
-                mandelbrot.Source = ImageSourceFromBitmap(map);
-            }catch(OutOfMemoryException oome)
-            {
-                MessageBox.Show("Image was to big to display!");
-            }
+           
            
         }
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]

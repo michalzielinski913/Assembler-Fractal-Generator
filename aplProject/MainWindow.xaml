@@ -30,7 +30,7 @@
                 <ComboBoxItem>C++</ComboBoxItem>
                 <ComboBoxItem>MASM</ComboBoxItem>
             </ComboBox>
-            <DataGrid Name="measurement" HorizontalAlignment="Left" Height="129" Margin="10,0,0,0" Grid.Row="6" Grid.RowSpan="3" VerticalAlignment="Top" Width="245" AutoGenerateColumns="False">
+            <DataGrid Name="measurement" HorizontalAlignment="Left" Height="129" Margin="10,10,0,0" Grid.Row="5" Grid.RowSpan="3" VerticalAlignment="Top" Width="245" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="[ms]" Binding="{Binding measureType}" />
                     <DataGridTextColumn Header="C#" Binding="{Binding cSharp}" />
@@ -48,14 +48,15 @@
 
             <TextBox  HorizontalAlignment="Left" x:Name="width" TextWrapping="Wrap" Text="1920"  Margin="64,15,0,13" Width="62" Grid.Row="2" />
             <Label Content="Width:"  HorizontalAlignment="Left"  Margin="0,11,0,10" Grid.Row="2" />
+            <ProgressBar HorizontalAlignment="Left" Name="progress" Height="19" Margin="10,18,0,0" Grid.Row="8" VerticalAlignment="Top" Width="245"/>
         </Grid>
         <Image HorizontalAlignment="Left" Height="420" Width="510" Grid.Column="0" Stretch="Fill" Margin="5,5,5,5" VerticalAlignment="Top" Name="mandelbrot"/>
 
 
         <Label Content="Iterations: "  HorizontalAlignment="Left" Margin="524,6,0,-6" Grid.ColumnSpan="2" Grid.Row="0" />
         <Label Content="Engine: " HorizontalAlignment="Left" Margin="524,56,0,-54" Grid.ColumnSpan="2" Grid.Row="0" />
-        
-        <Button Content="Save and run" HorizontalAlignment="Left" Margin="524,206,0,0" VerticalAlignment="Top" Width="97" Height="19" Grid.ColumnSpan="2" Click="Save_Button_Click"/>
+
+        <Button Content="Save and run" Name="runButton" HorizontalAlignment="Left" Margin="524,206,0,0" VerticalAlignment="Top" Width="97" Height="19" Grid.ColumnSpan="2" Click="Save_Button_Click"/>
 
 
     </Grid>
