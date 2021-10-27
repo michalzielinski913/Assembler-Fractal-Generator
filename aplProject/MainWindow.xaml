@@ -48,7 +48,7 @@
 
             <TextBox  HorizontalAlignment="Left" x:Name="width" TextWrapping="Wrap" Text="1920"  Margin="64,15,0,13" Width="62" Grid.Row="2" />
             <Label Content="Width:"  HorizontalAlignment="Left"  Margin="0,11,0,10" Grid.Row="2" />
-            <ProgressBar HorizontalAlignment="Left" Name="progress" Height="19" Margin="10,18,0,0" Grid.Row="8" VerticalAlignment="Top" Width="245"/>
+            <ProgressBar HorizontalAlignment="Left" Name="progress" Height="19" Margin="10,18,0,0" Grid.Row="8" VerticalAlignment="Top" Width="245" Minimum="0" Maximum="100"/>
         </Grid>
         <Image HorizontalAlignment="Left" Height="420" Width="510" Grid.Column="0" Stretch="Fill" Margin="5,5,5,5" VerticalAlignment="Top" Name="mandelbrot"/>
 

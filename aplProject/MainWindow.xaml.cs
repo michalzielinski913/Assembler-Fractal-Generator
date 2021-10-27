@@ -72,9 +72,7 @@ namespace aplProject
             map = new Bitmap(Mwidth, Mheight);
             int test;
             for (int x = 0; x < Mwidth; x++)
-            {
-                test = (x ) * 100;
-                
+            {   
                 for (int y = 0; y < Mheight; y++)
                 {
                     double a = (double)(x - (Mwidth / 2)) / (double)(Mwidth / 4);
@@ -83,10 +81,11 @@ namespace aplProject
                     Complex z = new Complex(0, 0);
                     int it = man.countIterations(c, z);
                     map.SetPixel(x, y, man.getColor(it));
-                    (sender as BackgroundWorker).ReportProgress(test);
+                   
                 }
+                 (sender as BackgroundWorker).ReportProgress(x);
             }
-          
+            Trace.WriteLine("done");
         }
 
         private void generateFractalReportProgress(object sender, ProgressChangedEventArgs e)
@@ -114,7 +113,9 @@ namespace aplProject
             {
                 MessageBox.Show("Image was to big to display!");
             }
+            progress.Value = 0;
             progress.Visibility = Visibility.Hidden;
+            progress.Maximum = Mwidth;
             iter.IsEnabled = true;
             width.IsEnabled = true;
             height.IsEnabled = true;
@@ -143,6 +144,8 @@ namespace aplProject
             height.IsEnabled = false;
             runButton.IsEnabled = false;
             SelectionEngine.IsEnabled = false;
+            progress.Value = 0;
+            progress.Maximum = Mwidth;
             progress.Visibility = Visibility.Visible;
             fractalGenerationWorker.RunWorkerAsync();
             
