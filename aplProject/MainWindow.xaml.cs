@@ -60,8 +60,8 @@ namespace aplProject
             fractalGenerationWorker = new BackgroundWorker();
             fractalGenerationWorker.DoWork += generateFractalWorker;
             fractalGenerationWorker.RunWorkerCompleted += generateFractalComplete;
-            fractalGenerationWorker.WorkerReportsProgress = true;
-            fractalGenerationWorker.ProgressChanged += new ProgressChangedEventHandler(generateFractalReportProgress);
+            //fractalGenerationWorker.WorkerReportsProgress = true;
+            //fractalGenerationWorker.ProgressChanged += new ProgressChangedEventHandler(generateFractalReportProgress);
 
 
         }
@@ -83,7 +83,7 @@ namespace aplProject
                     Complex z = new Complex(0, 0);
                     int it = man.countIterations(c, z);
                     map.SetPixel(x, y, man.getColor(it));
-                    (sender as BackgroundWorker).ReportProgress(test);
+                  //  (sender as BackgroundWorker).ReportProgress(test);
                 }
             }
           
@@ -92,7 +92,7 @@ namespace aplProject
         private void generateFractalReportProgress(object sender, ProgressChangedEventArgs e)
         {
 
-            progress.Value = e.ProgressPercentage;
+         //   progress.Value = e.ProgressPercentage;
         }
 
         private void generateFractalComplete(object sender, RunWorkerCompletedEventArgs e)
