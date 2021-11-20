@@ -68,7 +68,24 @@ namespace aplProject
 
         private void generateFractalWorker(object sender, DoWorkEventArgs e)
         {
-            Mandelbrot man = new Mandelbrot(iterations);
+            FractalGenerator man;
+            switch (engine)
+            {
+                case EngineType.CSHARP:
+                    man=new MandelbrotCS(iterations);
+                    break;
+                case EngineType.CPP:
+                    man = new MandelbrotCPP(iterations);
+                    break;
+                default:
+                    man = new MandelbrotCS(iterations);
+                    break;
+            }
+            if (map != null)
+            {
+                Trace.WriteLine("remove");
+                map.Dispose();
+            }
             map = new Bitmap(Mwidth, Mheight);
             int test;
             for (int x = 0; x < Mwidth; x++)
@@ -85,7 +102,7 @@ namespace aplProject
                 }
                  (sender as BackgroundWorker).ReportProgress(x);
             }
-            Trace.WriteLine("done");
+           
         }
 
         private void generateFractalReportProgress(object sender, ProgressChangedEventArgs e)
@@ -121,6 +138,8 @@ namespace aplProject
             height.IsEnabled = true;
             runButton.IsEnabled = true;
             SelectionEngine.IsEnabled = true;
+            
+
         }
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
@@ -147,6 +166,19 @@ namespace aplProject
             progress.Value = 0;
             progress.Maximum = Mwidth;
             progress.Visibility = Visibility.Visible;
+            Trace.WriteLine(SelectionEngine.Text);
+            switch (SelectionEngine.Text)
+            {
+                case "C#":
+                    engine = EngineType.CSHARP;
+                    break;
+                case "C++":
+                    engine = EngineType.CPP;
+                    break;
+                case "MASM":
+                    engine = EngineType.CSHARP;
+                    break;
+            }
             fractalGenerationWorker.RunWorkerAsync();
             
            
