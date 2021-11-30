@@ -4,3 +4,15 @@ aplProject/obj/Debug/
 aplProject/bin/Debug/
 
 .vs/aplProject/v16/
+
+cppDLL/x64/Debug/
+
+FractalGenerationCpp/Debug/
+
+*.tlog
+
+x64/Debug/
+
+Win32/Debug/
+
+FractalGenerationCpp/x64/Debug/

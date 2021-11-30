@@ -1,0 +1,4 @@
+LIBRARY "FractalGenerationCpp"
+EXPORTS
+
+countIterations
