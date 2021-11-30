@@ -12,6 +12,5 @@ namespace aplProject
         System.Drawing.Color getColor(int interation);
 
         int countIterations(Complex c, Complex x);
-
     }
 }

@@ -11,7 +11,7 @@ extern "C" {
             real_two = tmp;
             real_two += real_one;
             imaginary_two += imaginary_one;
-            if ((sqrt(real_two * real_two) + (imaginary_two * imaginary_two)) > 2.0) break;
+            if (((real_two * real_two) + (imaginary_two * imaginary_two)) > 4.0) break;
 		} while (it < iterationLimit);
 		return it;
 	}

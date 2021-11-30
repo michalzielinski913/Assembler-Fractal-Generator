@@ -25,7 +25,7 @@ namespace aplProject
         }
         public double magnitude()
         {
-            return Math.Sqrt((real * real)+(imaginary*imaginary));
+            return ((real * real)+(imaginary*imaginary));
         }
         public void Add(Complex c)
         {

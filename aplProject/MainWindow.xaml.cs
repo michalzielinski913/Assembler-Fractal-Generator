@@ -1,4 +1,4 @@
-﻿using SharpGL;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace aplProject
 {
@@ -28,7 +29,6 @@ namespace aplProject
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Measurement> measurements;
         private int iterations;
         private EngineType engine;
         private Bitmap map;
@@ -36,26 +36,24 @@ namespace aplProject
 
         private int Mwidth = 1920;
         private int Mheight = 1080;
-        private void initializeMeasurementTable()
-        {
-            measurements = new List<Measurement>();
-            measurements.Add(new Measurement() { measureType="Average", cSharp=0.0, cpp=0.0, masm=0.0 });
-            measurements.Add(new Measurement() { measureType = "Minimum", cSharp = 0.0, cpp = 0.0, masm = 0.0 });
-            measurements.Add(new Measurement() { measureType = "Maximum", cSharp = 0.0, cpp = 0.0, masm = 0.0 });
-            measurement.ItemsSource = measurements;
-            measurement.IsReadOnly =true;
-            measurement.CanUserReorderColumns = false;
-            measurement.CanUserSortColumns = false;
-            progress.Visibility = Visibility.Hidden;
-        }
+
+        DispatcherTimer dt = new DispatcherTimer();
+        Stopwatch sw = new Stopwatch();
+        string currentTime = string.Empty;
+
+        TextBlock currentTimer;
+
 
         public MainWindow()
         {
             InitializeComponent();
-            initializeMeasurementTable();
             iterations = 80;
             engine = EngineType.CSHARP;
             SelectionEngine.SelectedIndex = 0;
+            CSTime.Text = "";
+            CPPTime.Text = "";
+            ASMTime.Text = "";
+            currentTimer = CSTime;
 
             fractalGenerationWorker = new BackgroundWorker();
             fractalGenerationWorker.DoWork += generateFractalWorker;
@@ -63,7 +61,8 @@ namespace aplProject
             fractalGenerationWorker.WorkerReportsProgress = true;
             fractalGenerationWorker.ProgressChanged += new ProgressChangedEventHandler(generateFractalReportProgress);
 
-
+            dt.Tick += new EventHandler(dt_Tick);
+            dt.Interval = new TimeSpan(0, 0, 0, 0, 1);
         }
 
         private void generateFractalWorker(object sender, DoWorkEventArgs e)
@@ -77,23 +76,29 @@ namespace aplProject
                 case EngineType.CPP:
                     man = new MandelbrotCPP(iterations);
                     break;
+                case EngineType.MASM:
+                    man = new MandelbrotASM(iterations);
+                    break;
                 default:
                     man = new MandelbrotCS(iterations);
                     break;
             }
+
             if (map != null)
             {
-                Trace.WriteLine("remove");
                 map.Dispose();
             }
             map = new Bitmap(Mwidth, Mheight);
-            int test;
+
+            sw.Start();
+            dt.Start();
             for (int x = 0; x < Mwidth; x++)
             {   
                 for (int y = 0; y < Mheight; y++)
                 {
                     double a = (double)(x - (Mwidth / 2)) / (double)(Mwidth / 4);
                     double b = (double)(y - (Mheight / 2)) / (double)(Mheight / 4);
+
                     Complex c = new Complex(a, b);
                     Complex z = new Complex(0, 0);
                     int it = man.countIterations(c, z);
@@ -102,7 +107,7 @@ namespace aplProject
                 }
                  (sender as BackgroundWorker).ReportProgress(x);
             }
-           
+
         }
 
         private void generateFractalReportProgress(object sender, ProgressChangedEventArgs e)
@@ -113,6 +118,7 @@ namespace aplProject
 
         private void generateFractalComplete(object sender, RunWorkerCompletedEventArgs e)
         {
+            
             try
             {
                 map.Save("mandelbrot.png");
@@ -138,12 +144,16 @@ namespace aplProject
             height.IsEnabled = true;
             runButton.IsEnabled = true;
             SelectionEngine.IsEnabled = true;
-            
 
+            if (sw.IsRunning)
+            {
+                sw.Stop();
+            }
         }
 
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
+            
             try
             {
                 int myNumber = Int32.Parse(iter.Text);
@@ -166,19 +176,23 @@ namespace aplProject
             progress.Value = 0;
             progress.Maximum = Mwidth;
             progress.Visibility = Visibility.Visible;
-            Trace.WriteLine(SelectionEngine.Text);
             switch (SelectionEngine.Text)
             {
                 case "C#":
                     engine = EngineType.CSHARP;
+                    currentTimer = CSTime;
                     break;
                 case "C++":
                     engine = EngineType.CPP;
+                    currentTimer = CPPTime;
                     break;
                 case "MASM":
-                    engine = EngineType.CSHARP;
+                    engine = EngineType.MASM;
+                    currentTimer = ASMTime;
                     break;
             }
+            sw.Reset();
+            currentTimer.Text = "00:00:00";
             fractalGenerationWorker.RunWorkerAsync();
             
            
@@ -210,6 +224,23 @@ namespace aplProject
             {
                 engine = EngineType.MASM;
             }
+           
+           
         }
+
+        void dt_Tick(object sender, EventArgs e)
+        {
+            if (sw.IsRunning)
+            {
+                TimeSpan ts = sw.Elapsed;
+                currentTime = String.Format("{0:00}:{1:00}:{2:00}",
+                ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
+                currentTimer.Text = currentTime;
+            }
+        }
+
+       
+       
+
     }
 }
