@@ -1,4 +1,2 @@
 LIBRARY "Asm"
-EXPORTS loopTest
-EXPORTS compareTest
 EXPORTS mandelbrot

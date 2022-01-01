@@ -29,18 +29,23 @@ namespace aplProject
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Amount of iterations
         private int iterations;
+        //What type of programming language will be used
         private EngineType engine;
+        //Image bitmap
         private Bitmap map;
+        //Background worker for fractal generation
         private System.ComponentModel.BackgroundWorker fractalGenerationWorker;
 
+        //Size of Image
         private int Mwidth = 1920;
         private int Mheight = 1080;
 
+        //Time counter variables
         DispatcherTimer dt = new DispatcherTimer();
         Stopwatch sw = new Stopwatch();
         string currentTime = string.Empty;
-
         TextBlock currentTimer;
 
 
@@ -64,7 +69,9 @@ namespace aplProject
             dt.Tick += new EventHandler(dt_Tick);
             dt.Interval = new TimeSpan(0, 0, 0, 0, 1);
         }
-
+        //Main fractal generation loop
+        //It calculates color value for each pixel
+        //Every image row update progress bar
         private void generateFractalWorker(object sender, DoWorkEventArgs e)
         {
             FractalGenerator man;
@@ -109,13 +116,14 @@ namespace aplProject
             }
 
         }
-
+        //This function updates progress bar
         private void generateFractalReportProgress(object sender, ProgressChangedEventArgs e)
         {
 
             progress.Value = e.ProgressPercentage;
         }
 
+        //Display finished fractal image and stop time counting
         private void generateFractalComplete(object sender, RunWorkerCompletedEventArgs e)
         {
             
@@ -151,6 +159,7 @@ namespace aplProject
             }
         }
 
+        //Store user given variables and start fractal generation
         private void Save_Button_Click(object sender, RoutedEventArgs e)
         {
             
@@ -198,10 +207,12 @@ namespace aplProject
            
            
         }
+        //Remove fractal image from memory
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool DeleteObject([In] IntPtr hObject);
 
+        //Convert bitmap to image source which will be used for image display
         public ImageSource ImageSourceFromBitmap(Bitmap bmp)
         {
             var handle = bmp.GetHbitmap();
@@ -211,6 +222,7 @@ namespace aplProject
             }
             finally { DeleteObject(handle); }
         }
+        //Update user engine selection
         private void SelectionEngine_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SelectionEngine.Text == "C#")
@@ -227,7 +239,7 @@ namespace aplProject
            
            
         }
-
+        //Update time counter with new time
         void dt_Tick(object sender, EventArgs e)
         {
             if (sw.IsRunning)

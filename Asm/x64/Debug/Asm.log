@@ -1,1 +1,7 @@
-﻿  Asm.vcxproj -> C:\Users\Michał\source\repos\aplProject\x64\Debug\Asm.dll
+﻿  Assembling AsmLibrary.asm...
+AsmLibrary.asm(70): warning A6004: procedure argument or local not referenced : realOne
+AsmLibrary.asm(70): warning A6004: procedure argument or local not referenced : imagineOne
+AsmLibrary.asm(70): warning A6004: procedure argument or local not referenced : realTwo
+AsmLibrary.asm(70): warning A6004: procedure argument or local not referenced : imagineTwo
+     Creating library C:\Users\Michał\source\repos\aplProject\x64\Debug\Asm.lib and object C:\Users\Michał\source\repos\aplProject\x64\Debug\Asm.exp
+  Asm.vcxproj -> C:\Users\Michał\source\repos\aplProject\x64\Debug\Asm.dll
