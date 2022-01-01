@@ -70,8 +70,6 @@ namespace aplProject
     {
         private int iterationLimit;
         private Color[] palette;
-        private int good = 0;
-        private int total = 0;
 
         public int countIterationss(Complex c, Complex x)
         {

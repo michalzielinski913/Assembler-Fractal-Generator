@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace aplProject
 {
+    //Complex number class for complex numbers calculations
+    //However It is only used when c# is used for calculations
     class Complex
     {
         public double real;
