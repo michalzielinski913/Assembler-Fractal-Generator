@@ -177,6 +177,11 @@ namespace aplProject
                 MessageBox.Show("Iterations amount must be valid Int!");
                 return;
             }
+            if(Mwidth>19200 || Mheight > 10800)
+            {
+                MessageBox.Show("Image is too big, maximal size is 19200x10800!");
+                return;
+            }
             iter.IsEnabled = false;
             width.IsEnabled = false;
             height.IsEnabled = false;
