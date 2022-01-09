@@ -16,3 +16,7 @@ x64/Debug/
 Win32/Debug/
 
 FractalGenerationCpp/x64/Debug/
+
+*.log
+
+*.png
