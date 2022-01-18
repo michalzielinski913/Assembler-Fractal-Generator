@@ -40,6 +40,7 @@ compareTest endp
 ; Therefore if we compare result of this procedure We must remember to compare square of it
 ;This was introduced in order to increase accuracy
 ;There were some minor differences in square functions between assembly and higher level languages
+;Final result is returned in xmm1 register
 magTest proc
 movapd xmm1, xmm2 ;move xmm2 to xmm1
 mulpd xmm1, xmm2 ;multiply xmm1 by xmm2
