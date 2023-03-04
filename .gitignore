@@ -22,3 +22,6 @@ FractalGenerationCpp/x64/Debug/
 *.png
 
 Asm/x64/Debug/AsmLibrary.obj
+
+Asm/x64/
+.vs/
